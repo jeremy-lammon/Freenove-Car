@@ -4,8 +4,8 @@
 
 
 
-#define SPEED_LV2   ( -50 )
-#define SPEED_LV1   ( -50 )
+
+#define SPEED_LV1   ( -30 )
 
 void tracker_setup()
 {
@@ -13,6 +13,9 @@ void tracker_setup()
   Motor_Setup();      //Motor initialization
 }
 
+
+float Previous_Left = 0;
+float Previous_Right = 0;
 
 void track_line_move()
 {
@@ -23,31 +26,32 @@ void track_line_move()
     switch (sensorValue[3])
     {
         case 2:   //010
-        Motor_M_Move(SPEED_LV1, SPEED_LV1, SPEED_LV1, SPEED_LV1);
-        
+        Previous_Left = SPEED_LV1;
+        Previous_Right = SPEED_LV1;
         break;
         case 5:   //101
         break;
         case 0:   //000
         break;
         case 7:   //111
-        Motor_M_Move(SPEED_LV1, SPEED_LV1, SPEED_LV1, SPEED_LV1);
+        Previous_Left = SPEED_LV1;
+        Previous_Right = SPEED_LV1;
         break;
         case 4:   //100
-        Motor_M_Move(-SPEED_LV2, -SPEED_LV2, SPEED_LV2, SPEED_LV2);
+        Previous_Left = -SPEED_LV1;
+        Previous_Right = SPEED_LV1;
         break;
         case 6:   //110
-        Motor_M_Move(SPEED_LV1, SPEED_LV1, SPEED_LV1, SPEED_LV1);
         break;
         case 1:   //001
-        Motor_M_Move(SPEED_LV2, SPEED_LV2, -SPEED_LV2, -SPEED_LV2);
+        Previous_Left = SPEED_LV1;
+        Previous_Right = -SPEED_LV1;
         break;
         case 3:   //011
-        Motor_M_Move(SPEED_LV1, SPEED_LV1, SPEED_LV1, SPEED_LV1);
         break;
         default:
-        //Serial.println("DEFAULT CASE TRIGGERED?");
         break;
 
     }
+    Motor_M_Move(Previous_Left, Previous_Left, Previous_Right, Previous_Right);
 }
